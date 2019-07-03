@@ -3,9 +3,9 @@ HOST: http://partners.apiblueprint.org/
 
 # Wardeneta - Partnerská zóna v1
 
-Tento dokument popisuje V1 verzi API určeného partnerům (třetím stranám) pro přístup k službám 
+Tento dokument popisuje V1 verzi API určeného partnerům (třetím stranám) pro přístup k službám
 poskytovaných systémem Wardeneta. Pro zařazení do partnerského systému je nutné kontaktovat
-provozovatele systému.
+provozovatele systému, který po schválení přístup poskytne potřebné údaje k použití API.
 
 # Group Autentikace
 
@@ -16,9 +16,9 @@ Z pohledu autentikace rozlišujeme tyto varianty:
 + pomocí důvěrných údajů
 + pomocí klienstkého ID
 
-Základním prvkem veškeré komunikace přes API je přístupový token, který je vytvořen 
+Základním prvkem veškeré komunikace přes API je přístupový token, který je vytvořen
 na základě předávaných přístupových údajů ve formě _`<Client ID>:<Client Secret>`_. Token je
-předáván jako autorizační parametr v hlavičce HTTP dotazu prostřednictvím 
+předáván jako autorizační parametr v hlavičce HTTP dotazu prostřednictvím
 **Authorization: Bearer _`<Access-Token>`_**. Získaný přístupový token je předáván pro každý
 další požadavek na API.
 Životnost tokenu je vždy časově omezena. Po jeho vypršení je nutné vytvořit nový přístupový token.
@@ -53,7 +53,7 @@ Požadavek na vystavení nového tokenu
 
     + Attributes (OAuth grant request)
     + Headers
-        
+
             Authorization: Basic ABCDEF
 
 + Request authorization_code (application/x-www-form-urlencoded; charset=utf-8)
@@ -64,23 +64,23 @@ Požadavek na vystavení nového tokenu
 + Response 200  (application/json)
 
     Úspěšná autentikace.
-    
+
     + Attributes (OAuth valid response)
 
 + Response 401  (application/json)
 
     Nelze autentikovat.
-    
+
     + Headers
-    
+
             X-authentication-error: popis chyby
-        
+
 + Response 500  (application/json)
 
     Chyba aplikace.
-    
+
     + Headers
-    
+
             X-authentication-error: popis chyby
 
 ### Zrušení tokenu [DELETE]
@@ -93,26 +93,28 @@ Požadavek na vystavení nového tokenu
 
 ### Získání autorizačního kódu [POST]
 
-Slouží k odeslání požadavku na vygenerováni `code` autorizačního kódu. K získání kódu musí mít partner 
+Slouží k odeslání požadavku na vygenerováni `code` autorizačního kódu. K získání kódu musí mít partner
 v rámci autentikace přístup ke `client_id`, které získá zaregistrováním své aplikace u provozovatele.
-Mimo toto ID zaregistruje i URL, na které přesměruje uživatele po získání tohoto kódu (pouze pro toto 
-URL bude autentikace povolena a bude pro něj platná).  
+Mimo toto ID zaregistruje i URL, na které přesměruje uživatele po získání tohoto kódu (pouze pro toto
+URL bude autentikace povolena a bude pro něj platná).
 
-+ Request Úspěšná autentikace (application/x-www-form-urlencoded; charset=utf-8)
++ Request (application/x-www-form-urlencoded; charset=utf-8)
 
     + Attributes (OAuth resptype request)
 
 + Response 200  (application/json)
 
+    Úspěšná autentikace.
+
     + Attributes (OAuth resptype response)
-    
+
 ### Zrušení autorizačního kódu [DELETE]
 
 + Response 202  (application/json)
 
 # Group Číselníky
 
-Zde popsané služby umožňují přístup k různým čísleníkům, které jsou používány obecně v rámci ostatních služeb. 
+Zde popsané služby umožňují přístup k různým čísleníkům, které jsou používány obecně v rámci ostatních služeb.
 Vůči koncovému uživatli mohou být použity např. k naplnění výběrového seznamu, apod.
 
 <a name="person-titles" ></a>
@@ -122,16 +124,16 @@ Vůči koncovému uživatli mohou být použity např. k naplnění výběrovéh
 Vrátí seznam dostupných titulů. Jejich hodnoty se používají k plnění titulů např. v ([registračním formuláři](#registration-form)).
 
 + Parameters
-    - before: 'false' (string, optional) - pokud false vynechá tituly používané před jménem 
-    - after: 'false' (string, optional) - pokud false vynechá tituly používané za jménem 
-        
-+ Request 
-        
+    - before: 'false' (string, optional) - pokud false vynechá tituly používané před jménem
+    - after: 'false' (string, optional) - pokud false vynechá tituly používané za jménem
+
++ Request
+
     + Headers
 
             Accept: application/json
             Authorization: Bearer ABCDEF...
-        
+
 + Response 200 (application/json)
 
     + Attributes  (Titles)
@@ -143,13 +145,13 @@ Vrátí seznam dostupných titulů. Jejich hodnoty se používají k plnění ti
 ### Seznam zdravotních pojišťoven [GET]
 Vrátí seznam dostupných zdravotních pojišťoven. Jejich hodnoty se používají k plnění např. v ([registračním formuláři](#registration-form)).
 
-+ Request 
-        
++ Request
+
     + Headers
 
             Accept: application/json
             Authorization: Bearer ABCDEF...
-        
+
 + Response 200 (application/json)
 
     + Attributes  (HealthInsuranceCompanies)
@@ -163,8 +165,8 @@ Služba umožňuje sledovat aktuální návštěvnost jednotlivých provozů.
 ###  Seznam všech aktuálních návštěvností [GET]
 
 Vrací seznam objektů s hodnotami návštěvnosti ve všech provozech daného provozovatele systému.
-+ Request 
-    
++ Request
+
     + Headers
 
             Accept: application/json
@@ -177,17 +179,17 @@ Vrací seznam objektů s hodnotami návštěvnosti ve všech provozech daného p
 ### Aktuální návštěvnost daného provozu [GET /api/v1/institutions/establishments/{establishmentId}/attendences]
 
 + Parameters
-    
-    + establishmentId: `2` (number, required) - ID provozu
-        
-+ Request 
 
-    + Headers 
-    
+    + establishmentId: `2` (number, required) - ID provozu
+
++ Request
+
+    + Headers
+
             Accept: application/json
             Authorization: Bearer ABCDEF...
-            
-            
+
+
 + Response 200 (application/json)
 
     + Attributes (Attendemce)
@@ -197,37 +199,37 @@ Vrací seznam objektů s hodnotami návštěvnosti ve všech provozech daného p
 
 ### Seznam teplot pro všechny měřená čidla [GET]
 
-+ Request 
++ Request
 
-    + Headers 
-    
+    + Headers
+
             Accept: application/json
             Authorization: Bearer ABCDEF...
-            
+
 + Response 200 (application/json)
 
     + Attributes (Temperatures)
-    
+
 ### Teplota pro dané čidlo [GET /api/v1/my/institutions/temperatures/{itemName}]
 
 + Parameters
 
     + itemName: `TEMP_V_B1` (string, required) - ID čidla
 
-+ Request 
++ Request
 
-    + Headers 
-    
+    + Headers
+
             Accept: application/json
             Authorization: Bearer ABCDEF...
-            
+
 + Response 200 (application/json)
 
     + Attributes (Temperature)
 
 ## Přehled aktivit [/api/v1/my/institutions/time-tables/{date}{?days,locality,esatblishment,area}]
 
-Denní snímek aktivit je přehled stavů v jakých se vyskytuje daná zóna běheme konkretního dne. Zóna může být ve dvou 
+Denní snímek aktivit je přehled stavů v jakých se vyskytuje daná zóna běheme konkretního dne. Zóna může být ve dvou
 základních stavech:
 
 * otevřená
@@ -242,7 +244,7 @@ Dále je možné omezit zónu pouze pro předem nahlášené aktivity, tedy neum
 tyto aktivity.
 
 Obykle má provoz pravidelnou otvírací dobu, ale je možné celý nebo část provozu _mimořádně_ dočasně uzavřít nebo otevřít,
-např. v případě opravy, závodů, apod. Informace o typu mimořadné situace je možné přenést v rámci snímku 
+např. v případě opravy, závodů, apod. Informace o typu mimořadné situace je možné přenést v rámci snímku
 aktivit.
 
 + Parameters
@@ -252,20 +254,20 @@ aktivit.
     + `locality`: `2` (number,optional) - ID lokality, pro kterou je plán generován.
     + `esatblishment`: `5` (number,optional) - ID provozu, pro který je plán generován .
     + `area`: `2e5a2935-7a9a-4158-b11e-74f1a09ec603` (string,optional) - ID zóny, pro kterou je plán generován.
-        
+
 ### Seznam aktivit pro daný den nebo interval dnů [GET]
 
 Služba je určena k zobrazení denního snímku aktivit v daném provozu pro daný den nebo několik dnů. Seznam je
 možné omezit na danou lokalitu, provoz nebo zónu.
 
 
-+ Request 
++ Request
 
-    + Headers 
-    
+    + Headers
+
             Accept: application/json
             Authorization: Bearer ABCDEF...
-            
+
 + Response 200 (application/json)
 
     + Attributes (TimeTableResponse)
@@ -275,10 +277,10 @@ možné omezit na danou lokalitu, provoz nebo zónu.
 Využití některých služeb je podmíněno zařazením evidovaného zákazníka do členského programu. Aby se
 zákazník mohl tyto služby využit, musí vyplnit registrační fomulář. Ten obsahuje jednak obecne údaje,
 např. jméno a příjmení, kontaktní údaje, a potom sadu volitelných otázek, jejichž obsah si určí
-provozovatel dle svých potřeb. Registrační formulář může obsahovat i sekci s podmínkami, které musi 
-zákazník odsouhlasit, aby mohl o členství požádat. 
+provozovatel dle svých potřeb. Registrační formulář může obsahovat i sekci s podmínkami, které musi
+zákazník odsouhlasit, aby mohl o členství požádat.
 
-Konečný způsob schválení členství je volitelný dle nastavení provozovatele. MÚže se např. vyžadovat 
+Konečný způsob schválení členství je volitelný dle nastavení provozovatele. MÚže se např. vyžadovat
 následný podpis dokumentů.
 
 ## Definice registračního formuláře [/api/v1/customer-registration-definitions]
@@ -289,24 +291,24 @@ na ně.
 
 ### Seznam definicí  [GET]
 Vrátí seznam definicí, z kterých se sestaví registrační fomulář. Formulář má 2 části
-* otázky - seznam otázek, které musí zákazník vyplnit, aby registrace byla platná 
+* otázky - seznam otázek, které musí zákazník vyplnit, aby registrace byla platná
 * texty - seznam informačních textů, odkazů, případně potvrzujících podmínek
 
 Další části definice je seznam povinných polí. Provozovatel může sám rozhodnout, která pole pevné části
 formuláře jsou povinná.
 
-+ Request 
++ Request
 
     + Headers
 
             Accept: application/json
             Authorization: Bearer ABCDEF...
-        
+
 + Response 200 (application/json)
 
     + Attributes (RegistrationFormDefinition)
 
-+ Response 401 
++ Response 401
 
 ## Registrace [/api/v1/customer-registrations]
 Správa údajů o provedených registracích.
@@ -321,9 +323,9 @@ Založí záznam o registraci nového zákazníka
     + Headers
 
             Accept:application/json
-            
+
     + Attributes (RegistrationRequest)
-    
+
 + Response 201 (application/json)
 
     + Attributes (RegistrationResponse)
@@ -337,15 +339,15 @@ Vrátí seznam existujících registrací.
 
             Accept:application/json
             Authorization: Bearer xhhgj...
-    
+
     + Parameters
         + `birthdate`: `19980101` (number,optional) Datum narození
         + `surname`: `Novák` (string,optional) Příjmení
         + `firstname`: `Jan` (string,optional) Jméno
-        
-           
+
+
 + Response 200 (application/json)
- 
+
     + Attributes (RegistrationResponses)
 
 # Group Členství
@@ -362,20 +364,20 @@ Vrátí seznam existujících členských karet.
 
             Accept:application/json
             Authorization: Bearer xhhgj...
-    
+
 
 + Response 200 (application/json)
- 
+
     + Attributes (Card)
 
-    
+
 # Data Structures
 
-## uuid (string) 
+## uuid (string)
 
 Řetězec ve tvaru UUID
 
-## date (string) 
+## date (string)
 
 Datum v ISO tvaru
 
@@ -401,13 +403,13 @@ Datum v ISO tvaru
 + `redirect_uri`: `https://example-app.com/cb` (string, required)
 URL, na které bude uživatel přesměrován po úspěšném vytvoření autorizačního kódu. Parter zádá toto
 URL během registrace dané aplikace.
-+ `client_id`: `1234567890` (string, required) 
++ `client_id`: `1234567890` (string, required)
 ID, které partner získá zaregistrováním své aplikace u provozovatele. Nemělo bz být veřejně dostupné.
 ## OAuth resptype request (object)
 
 ### Properties
 + `response_type`: `code` (string, required)
-+ `client_id`: `1234567890` (string, required) 
++ `client_id`: `1234567890` (string, required)
 ID, které partner získá zaregistrováním své aplikace u provozovatele. Nemělo bz být veřejně dostupné.
 + `redirect_uri`: `https://example-app.com/cb` (string, required)
 URL, na které bude uživatel přesměrován po úspěšném vytvoření autorizačního kódu. Parter zádá toto
@@ -448,7 +450,7 @@ Náhodný řetězec určený k následnému ověření odpovědi partnerem
 + itemDesc: `Teplota velkého bazénu` (string) - popis čidla
 + value: `24.6` (string, required) - naměřená hodnota
 + timestamp: `2015-08-05T08:40:51.620Z` (date, required) - čas platnosti uvedených údajů
-                
+
 ## Titles (array)
 
 - (Title)
@@ -489,8 +491,8 @@ Náhodný řetězec určený k následnému ověření odpovědi partnerem
 ## RegistrationObjet (object)
 
 ### Properties
-+ backTitles: null (string, optional) 
-seznam titulů používaných za jménem oddělěných mezerou, povoleno pouze pro registrované starší 18 let. 
++ backTitles: null (string, optional)
+seznam titulů používaných za jménem oddělěných mezerou, povoleno pouze pro registrované starší 18 let.
 Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
 + birthdate: 19801205 (number, required) - datum narození ve tvaru RRRRMMDD
 + deputyBirthdate: 19600308 (number, optional) - datum narození zákonného zástupce ve tvaru RRRRMMDD, povinné pro registrované mladší 18 let, pro osoby starší nepoužíváno
@@ -511,7 +513,7 @@ Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
         + Members
             + 'M - muž
             + 'F' - žena
-            
+
 + site: `Praha` (string, required) - obec v adrese registrovaného
 + stret: `Hlavní` (string, required) - ulice v adrese registrovaného
 + stretNo: `123` (string, required) - číslo popisné v adrese registrovaného
@@ -543,13 +545,13 @@ Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
 - answerType: `S` (enum[string], required) - typ odpovědi
 
     + Default: `S`
-        
+
     + Members
         + `S` - textový řetězec
-        + `B` - logická hodnota 
+        + `B` - logická hodnota
         + `L` - seznam odpovědí
         + `I` - číslo
-        
+
 - minAge: 120 (number, optional) - počet měsíců věku, od kdy je otázka aktivní
 - maxAge: 500 (number, optional) - počet měsíců věku, do kdy je otázka aktivní
 - condQuestionId: 3 (number, nullable, optional) - ID otázky, která může ovlivnit použití dané otázky
@@ -561,9 +563,9 @@ Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
 ### Properties
 - fieldId: 1 (number, required) - ID pole
 - fieldName: `surname` (string, required) - symbolícký název pole
-- minAge: 120 (number, optional) - počet měsíců věku, od kdy je pole povinné. Pokud je null, je poviné 
+- minAge: 120 (number, optional) - počet měsíců věku, od kdy je pole povinné. Pokud je null, je poviné
     bez spodního omezení věkem
-- maxAge: 500 (number, optional) - počet měsíců věku, do kdy je pole povinné. Pokud je null, je poviné 
+- maxAge: 500 (number, optional) - počet měsíců věku, do kdy je pole povinné. Pokud je null, je poviné
     bez horního omezení věkem
 
 ## RegistrationFormText (object)
@@ -573,7 +575,7 @@ Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
 + orderId: 2 (number, required) - pořadí doplňkového textu ve formuláři
 + minAge: 120 (number, optional) - počet měsíců věku, od kdy je text aktivní
 + maxAge: 500 (number, optional) - počet měsíců věku, do kdy je text aktivní
-+ textValue: `Text...` (string, required) 
++ textValue: `Text...` (string, required)
     vlastní text (informační text, hyperlinkový odkaz anebo podmínka vyžadující potvrzení zákazníkem)
 + url: null (string, required) - hyperlinkový odkaz na odpovídající dokument
 + checkFlag: true (boolean, required) - příznak, zda má být tento text potvrzen checkboxem
@@ -649,7 +651,7 @@ Dostupné tituly je možné získat pomoci ([totoho API](#person-titles))
 - `isClosed`: `false` (boolean, required) - příznak, zda je v daném čase daná zóna otevřena _false_ nebo uzavřena _true_.
 - `isReservable`: `true` (boolean, required) - příznak, zda je možné zónu v daném čase pronajmout
 - `isReservationOnly`: `true` (boolean, required) - příznak, zda daná zóna může v daném čase mít pouzerezervované aktivity
-- `isReserved`: `true` (boolean, required) - příznak, zda je daná z=ona právě pronajata pro aktivitu. Popis aktivity je 
+- `isReserved`: `true` (boolean, required) - příznak, zda je daná z=ona právě pronajata pro aktivitu. Popis aktivity je
 v poli _reservation_.
 - `reservation` (TimeTableReservation, optional) - popis provozované aktivity
 
@@ -657,13 +659,13 @@ v poli _reservation_.
 
 ### Properties
 
-- `customerName`: `Plavecký oddíl` (string, required) - název poskytovatele aktivity 
-- `shortName`: `SWIM` (string, required) - zkratka aktivity 
-- `note`: `Plavání` (string, required) - popis aktivity 
-- `infoText`: `Plavání pro pokročilé` (string, required) - podrobnější popis aktivity 
+- `customerName`: `Plavecký oddíl` (string, required) - název poskytovatele aktivity
+- `shortName`: `SWIM` (string, required) - zkratka aktivity
+- `note`: `Plavání` (string, required) - popis aktivity
+- `infoText`: `Plavání pro pokročilé` (string, required) - podrobnější popis aktivity
 - `acceptBooking`: `true` (boolean, required) - příznak, zda se zákazník může do dané aktivity registrovat
 - `isCourse`: `false` (boolean, required) - příznak, zda se jedná o uzavřený kurz, či otevřenou lekci
-- `activityName`: `Znak a prsa` (string, optional) - název konkrétní lekce 
+- `activityName`: `Znak a prsa` (string, optional) - název konkrétní lekce
 - `instructorName`: `Josef Plavec` (string, optional) - jméno lektora/instruktora vedoucího lekci
 - `cardLimit`: `12` (number, optional) - maximální počet účastníků lekce
 - `bookedCount`: `6` (number, optional) - aktuální počet registrovaných účastníků lekce
